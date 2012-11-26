@@ -1,3 +1,4 @@
+import re
 from maintenance.models import MaintenanceMessage
 from datetime import datetime
 from django.conf import settings
@@ -15,6 +16,13 @@ class MaintenanceMiddleware(object):
         
         if request.user.is_superuser and disable_for_superuser:
             return None
+
+        ignore_urls = getattr(settings, 'MAINTENANCE_IGNORE_URLS', [])
+
+        match_path = re.sub('^/', '', request.path)
+        for pattern in ignore_urls:
+            if re.match(pattern, match_path):
+                return None
         
         messages = None
         if getattr(settings, 'MAINTENANCE_CACHE_MESSAGES', False):
