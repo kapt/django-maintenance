@@ -16,6 +16,7 @@ class MaintenanceMiddleware(object):
         if request.user.is_superuser and disable_for_superuser:
             return None
         
+        messages = None
         if getattr(settings, 'MAINTENANCE_CACHE_MESSAGES', False):
             messages = cache.get('maintenance_messages')
         
