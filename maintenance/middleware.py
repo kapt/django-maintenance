@@ -1,6 +1,7 @@
 import re
 from maintenance.models import MaintenanceMessage
 from datetime import datetime
+from django.utils import timezone
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.template import RequestContext
@@ -29,9 +30,9 @@ class MaintenanceMiddleware(object):
             messages = cache.get('maintenance_messages')
         
         if not messages:
-            messages = MaintenanceMessage.objects.filter(start_time__lt=datetime.now())\
+            messages = MaintenanceMessage.objects.filter(start_time__lt=timezone.now())\
                 .filter(\
-                Q(end_time__gte=datetime.now()) | Q(end_time__isnull=True) )
+                Q(end_time__gte=timezone.now()) | Q(end_time__isnull=True) )
             cache.set('maintenance_messages', messages, getattr(settings, 'MAINTENANCE_CACHE_SECONDS', 3600))
         
         try:

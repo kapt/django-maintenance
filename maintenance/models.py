@@ -4,10 +4,11 @@ from django.db.models.signals import post_save
 from django.core.cache import cache
 from django.conf import settings
 from datetime import datetime
+from django.utils import timezone
 
 class MaintenanceMessage(models.Model):
     message = models.TextField()
-    start_time = models.DateTimeField(default=datetime.now())
+    start_time = models.DateTimeField(default=timezone.now())
     end_time = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
