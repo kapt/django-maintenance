@@ -13,6 +13,9 @@ class MaintenanceMessage(models.Model):
 
     def __str__(self):
         return self.message
+        
+    def __unicode__(self):
+        return unicode(self.message)
 
 # Invalidate the cache when a MaintenanceMessage is saved
 @receiver(post_save, sender=MaintenanceMessage)
